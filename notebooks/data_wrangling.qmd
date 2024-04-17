@@ -1,0 +1,14 @@
+---
+title: "Data wrangling"
+author: "Eric Anku"
+format: html
+---
+
+```{r load-libraries}
+pacman::p_load(
+  rio, # Load dataset
+  janitor, # Clean column names,
+  tidyverse, # data wrangling
+)
+```
+
