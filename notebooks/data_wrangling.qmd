@@ -64,7 +64,8 @@ df |>
       patient_number,
       patient_name,
       visit_no,
-      ward_room
+      ward_room,
+      sr_no
     )
   )
 ```
