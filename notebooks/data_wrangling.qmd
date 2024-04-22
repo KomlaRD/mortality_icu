@@ -31,6 +31,10 @@ df1 <- bind_rows(df_2019, df_2020, df_2021, df_2022, df_2023)
 df1 <- clean_names(df1)
 
 # Rename patient_no to patient_number
+df1 <- df1 |>
+  rename(
+    "patient_number" = patient_no
+  )
 ```
 
 ```{r remove-non-relevant-features}
