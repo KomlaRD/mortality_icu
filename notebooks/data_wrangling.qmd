@@ -26,5 +26,26 @@ df_register <- import(here("data", "test_data_new.xlsx"))
 #| Label: Merge datasets
 
 df1 <- bind_rows(df_2019, df_2020, df_2021, df_2022, df_2023)
+
+# Clean names
+df1 <- clean_names(df1)
+
+# Rename patient_no to patient_number
+```
+
+```{r remove-non-relevant-features}
+# Clean names and remove non-relevant features
+df_register <- df_register |>
+  clean_names() |>
+  select(-c(
+    start,
+    end,
+    comments,
+    id,
+    uuid,
+    submission_time,
+    validation_status,
+    notes
+  ))
 ```
 
