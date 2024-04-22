@@ -12,3 +12,18 @@ pacman::p_load(
 )
 ```
 
+```{r import-dataset}
+df_2019 <- import("data","df_2019.xlsx")
+df_2020 <- import("data", "df_2020.xlsx")
+df_2021 <- import("data", "df_2021.xlsx")
+df_2022 <- import("data", "df_2022.xlsx")
+df_2023 <- import("data", "df_2023.xlsx")
+df_register <- import("data", "test_data_new.xlsx")
+```
+
+```{r}
+#| Label: Merge datasets
+
+df1 <- bind_rows(df_2019, df_2020, df_2021, df_2022, df_2023)
+```
+
