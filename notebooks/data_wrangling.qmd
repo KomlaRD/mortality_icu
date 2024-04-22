@@ -57,3 +57,15 @@ df_register <- df_register |>
 df <- merge(df1, df_register, by = "patient_number")
 ```
 
+```{r remove-identifiers}
+df |>
+  select(
+    -c(
+      patient_number,
+      patient_name,
+      visit_no,
+      ward_room
+    )
+  )
+```
+
