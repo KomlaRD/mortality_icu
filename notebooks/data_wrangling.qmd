@@ -9,19 +9,20 @@ pacman::p_load(
   rio, # Load dataset
   janitor, # Clean column names,
   tidyverse, # data wrangling
+  here
 )
 ```
 
 ```{r import-dataset}
-df_2019 <- import("data","df_2019.xlsx")
-df_2020 <- import("data", "df_2020.xlsx")
-df_2021 <- import("data", "df_2021.xlsx")
-df_2022 <- import("data", "df_2022.xlsx")
-df_2023 <- import("data", "df_2023.xlsx")
-df_register <- import("data", "test_data_new.xlsx")
+df_2019 <- import(here("data","df_2019.xlsx"), skip_rows=3)
+df_2020 <- import(here("data", "df_2020.xlsx"), skip_rows=3)
+df_2021 <- import(here("data", "df_2021.xlsx"), skip_rows=3)
+df_2022 <- import(here("data", "df_2022.xlsx"), skip_rows=3)
+df_2023 <- import(here("data", "df_2023.xlsx"), skip_rows=3)
+df_register <- import(here("data", "test_data_new.xlsx"))
 ```
 
-```{r}
+```{r merge-dataset}
 #| Label: Merge datasets
 
 df1 <- bind_rows(df_2019, df_2020, df_2021, df_2022, df_2023)
