@@ -58,6 +58,19 @@ df_register <- df_register |>
   ))
 ```
 
+```{r duplicate-records-readmission}
+df_duplicates <- get_dupes(df1, patient_number)
+```
+
+```{r distinct-patient}
+df_unique <- 
+  df1 |>
+  distinct(
+    patient_number, .keep_all = TRUE
+  )
+```
+
+
 ```{r merge-ehr-register}
 df <- merge(df1, df_register, by = "patient_number")
 ```
@@ -74,4 +87,20 @@ df |>
     )
   )
 ```
+
+```{r duplicate-analyse}
+# Function to analyse duplicates
+name_analyser <- 
+  function(name) {
+    df_duplicates |>
+    filter(patient_name == name)
+}
+```
+
+
+```{r}
+name_analyser("Enter name here")
+```
+
+
 
