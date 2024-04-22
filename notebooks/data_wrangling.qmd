@@ -53,3 +53,7 @@ df_register <- df_register |>
   ))
 ```
 
+```{r merge-ehr-register}
+df <- merge(df1, df_register, by = "patient_number")
+```
+
