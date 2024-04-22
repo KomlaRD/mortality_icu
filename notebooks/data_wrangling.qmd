@@ -49,7 +49,12 @@ df_register <- df_register |>
     uuid,
     submission_time,
     validation_status,
-    notes
+    notes,
+    status,
+    submiited_by,
+    version,
+    tags,
+    index
   ))
 ```
 
