@@ -9,7 +9,8 @@ pacman::p_load(
   rio, # Load dataset
   janitor, # Clean column names,
   tidyverse, # data wrangling
-  here # Relative path
+  here, # Relative path
+  lubridate # Working with dates
 )
 ```
 
@@ -58,6 +59,11 @@ df_register <- df_register |>
   ))
 ```
 
+```{r sum-duplicates}
+sum(duplicated(df1$patient_number))
+```
+
+
 ```{r duplicate-records-readmission}
 df_duplicates <- get_dupes(df1, patient_number)
 ```
@@ -98,7 +104,7 @@ name_analyser <-
 ```
 
 
-```{r}
+```{r enter-name-here}
 name_analyser("Enter name here")
 ```
 
