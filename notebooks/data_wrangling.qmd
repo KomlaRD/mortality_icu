@@ -10,7 +10,8 @@ pacman::p_load(
   janitor, # Clean column names,
   tidyverse, # data wrangling
   here, # Relative path
-  lubridate # Working with dates
+  lubridate, # Working with dates
+  feather # Interoperable data object
 )
 ```
 
