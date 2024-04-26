@@ -64,6 +64,16 @@ sum(duplicated(df1$patient_number))
 ```
 
 
+```{r}
+str(df1)
+```
+```{r}
+# Mutate admission date into date
+df1$admission_date <- dmy(df1$admission_date)
+```
+
+
+
 ```{r duplicate-records-readmission}
 df_duplicates <- get_dupes(df1, patient_number)
 ```
