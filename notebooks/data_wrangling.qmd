@@ -73,13 +73,22 @@ df1$admission_date <- dmy(df1$admission_date)
 ```
 
 
-
 ```{r duplicate-records-readmission}
-df_duplicates <- get_dupes(df1, patient_number)
+df_duplicates <- get_dupes(df_unique, patient_number)
 ```
 
+```{r unique-dataset}
+# Retain only the latest observations
+df_unique <- df1 |>
+  arrange(patient_number, admission_date) %>%
+  group_by(patient_number) %>%
+  slice_max(admission_date) %>%
+  ungroup()
+```
+
+
 ```{r distinct-patient}
-df_unique <- 
+df_distinct <- 
   df1 |>
   distinct(
     patient_number, .keep_all = TRUE
