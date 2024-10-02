@@ -21,7 +21,7 @@ df_2020 <- import(here("data", "df_2020.xlsx"), skip = 3)
 df_2021 <- import(here("data", "df_2021.xlsx"), skip_rows =3)
 df_2022 <- import(here("data", "df_2022.xlsx"), skip =3)
 df_2023 <- import(here("data", "df_2023.xlsx"), skip =3)
-df_register <- import(here("data", "test_data_new.xlsx"))
+df_register <- import(here("data", "test_run_data.xlsx"))
 ```
 
 ```{r merge-dataset}
@@ -31,6 +31,7 @@ df1 <- bind_rows(df_2019, df_2020, df_2021, df_2022, df_2023)
 
 # Clean names
 df1 <- clean_names(df1)
+df_register <- clean_names(df_register)
 
 # Rename patient_no to patient_number
 df1 <- df1 |>
@@ -42,7 +43,6 @@ df1 <- df1 |>
 ```{r remove-non-relevant-features}
 # Clean names and remove non-relevant features
 df_register <- df_register |>
-  clean_names() |>
   select(-c(
     start,
     end,
@@ -53,7 +53,7 @@ df_register <- df_register |>
     validation_status,
     notes,
     status,
-    submiited_by,
+    submitted_by,
     version,
     tags,
     index
@@ -68,6 +68,8 @@ sum(duplicated(df1$patient_number))
 ```{r}
 str(df1)
 ```
+
+
 ```{r}
 # Mutate admission date into date
 df1$admission_date <- dmy(df1$admission_date)
@@ -128,5 +130,9 @@ name_analyser <-
 name_analyser("Enter name here")
 ```
 
+```{r}
+# Inspect admission date and time, discharge date and time from EHR and A&D data
+df |> select(patient_name, admission_date.x, admission_date.y, admission_time.x, admission_time.y, discharge_date.x, discharge_date.y, discharge_time.x, discharge_time.y)
+```
 
 
