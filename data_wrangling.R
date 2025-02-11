@@ -5,5 +5,9 @@ pacman::p_load(
   tidyverse, # data wrangling
   here, # Relative path
   lubridate, # Working with dates
-  feather # Interoperable data object
+  feather, # Interoperable data object
+  skimr, # EDA
+  DataExplorer, # EDA
+  SmartEDA, # EDA
+  explore # EDA
 )
