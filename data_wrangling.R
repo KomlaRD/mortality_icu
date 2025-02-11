@@ -8,7 +8,6 @@ pacman::p_load(
   feather, # Interoperable data object
   skimr, # EDA
   DataExplorer, # EDA
-  SmartEDA, # EDA
   explore # EDA
 )
 
@@ -52,11 +51,9 @@ and |>
 
 # Create eda reports for ehr
 create_report(ehr, report_title = "Mortality EDA (EHR)")
-ExpReport(ehr, op_file="Mortality EDA (EHR)")
 
 # Create eda reports for and
 create_report(ehr, report_title = "Mortality EDA (A&D)")
-ExpReport(ehr, op_file="Mortality EDA (A&D)")
 
 
 
