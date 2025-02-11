@@ -11,3 +11,7 @@ pacman::p_load(
   SmartEDA, # EDA
   explore # EDA
 )
+
+# Import datasets
+ehr <- import(here("data", "ehr.xlsx")) # Import EHR data
+and <- import(here("data", "and.xlsx")) # Import A&D data
