@@ -13,7 +13,7 @@ pacman::p_load(
 )
 
 # Import datasets
-ehr <- import(here("data", "ehr.xlsx")) # Import EHR data (780 observations)
+ehr <- import(here("data", "ehr.xlsx"), skip = 3) # Import EHR data (780 observations)
 and <- import(here("data", "and.xlsx")) # Import A&D data (716 observations)
 
 # Clean colnames
