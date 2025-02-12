@@ -12,15 +12,19 @@ pacman::p_load(
 )
 
 # Import datasets
-ehr <- import(here("data", "ehr.xlsx"), skip = 3) # Import EHR data (780 observations)
+ehr <- import(here("data", "ehr.xlsx"), skip = 3) # Import EHR data (777 observations)
 and <- import(here("data", "and.xlsx")) # Import A&D data (716 observations)
 
 # Clean colnames
 ehr <- clean_names(ehr) 
 and <- clean_names(and)
 
-# Select relevant features
-and |>
+# Remove irrelevant features ehr
+ehr <- ehr |>
+  select(-sr_no)
+
+# Select relevant features and
+and <- and |>
   select(
     patient_number,
     admission_date,
