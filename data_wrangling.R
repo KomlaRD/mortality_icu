@@ -19,6 +19,10 @@ and <- import(here("data", "and.xlsx")) # Import A&D data (716 observations)
 ehr <- clean_names(ehr) 
 and <- clean_names(and)
 
+
+# -------------------------------
+# EHR cleaning
+
 # Remove irrelevant features ehr
 ehr <- ehr |>
   select(-c(sr_no,
@@ -28,6 +32,37 @@ ehr <- ehr |>
             ))
 # Source of admission feature: NA
 
+
+# Function to convert all age units to years
+convert_to_years <- function(age_str) {
+  age_str <- str_trim(str_to_lower(age_str))  # Standardize text (lowercase, trim spaces)
+  num <- as.numeric(str_extract(age_str, "\\d+"))  # Extract the numeric part
+  
+  if (is.na(num)) return(NA)  # Handle cases where extraction fails
+  
+  if (str_detect(age_str, "year")) {
+    return(num)  # Already in years
+  } else if (str_detect(age_str, "month")) {
+    return(num / 12)  # Convert months to years
+  } else if (str_detect(age_str, "week")) {
+    return(num / 52)  # Convert weeks to years
+  } else {
+    return(NA)  # Handle unexpected cases
+  }
+}
+
+# Apply conversion to dataset
+ehr <- ehr %>%
+  mutate(age_numeric = sapply(age, convert_to_years))
+
+# Split into adults and pediatrics
+adults <- ehr %>% filter(age_numeric >= 18)
+pediatrics <- ehr %>% filter(age_numeric < 18)
+
+
+
+#----------------------------
+# Admissions and Discharge data
 # Select relevant features and
 and <- and |>
   select(
