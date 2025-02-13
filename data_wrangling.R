@@ -12,8 +12,10 @@ pacman::p_load(
 )
 
 # Import datasets
-ehr <- import(here("data", "ehr.xlsx"), skip = 3) # Import EHR data (777 observations)
-and <- import(here("data", "and.xlsx")) # Import A&D data (716 observations)
+ehr <- import(here("data", "ehr.xlsx"), skip = 3) # Convert "Missing" to NA # Import EHR data (777 observations)
+and <- import(here("data", "and.xlsx")) %>%
+  mutate(across(everything(), ~ na_if(trimws(as.character(.)), "Missing"))) %>%
+  mutate(across(everything(), ~ na_if(., "DK/Missing")))  # Convert both to NA # Import A&D data (716 observations)
 
 # Clean colnames
 ehr <- clean_names(ehr) 
