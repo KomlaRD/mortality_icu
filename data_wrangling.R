@@ -22,7 +22,10 @@ and <- clean_names(and)
 # Remove irrelevant features ehr
 ehr <- ehr |>
   select(-c(sr_no,
-            source_of_admission))
+            source_of_admission,
+            bed_no,
+            ward_room
+            ))
 # Source of admission feature: NA
 
 # Select relevant features and
