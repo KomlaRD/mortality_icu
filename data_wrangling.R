@@ -30,7 +30,8 @@ ehr <- ehr |>
   select(-c(sr_no,
             source_of_admission,
             bed_no,
-            ward_room
+            ward_room,
+            visit_no
             ))
 # Source of admission feature: NA
 
