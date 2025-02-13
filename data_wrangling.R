@@ -34,8 +34,9 @@ ehr <- ehr |>
             ))
 # Source of admission feature: NA
 
-# Mutate admission date into date
+# Mutate admission and discharge date into date
 ehr$admission_date <- dmy(ehr$admission_date)
+ehr$discharge_date <- dmy(ehr$discharge_date)
 
 # Function to convert all age units to years
 convert_to_years <- function(age_str) {
