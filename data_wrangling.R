@@ -5,6 +5,7 @@ pacman::p_load(
   tidyverse, # data wrangling
   here, # Relative path
   lubridate, # Working with dates
+  hms, # Work with time
   feather, # Interoperable data object
   skimr, # EDA
   DataExplorer, # EDA
@@ -38,6 +39,21 @@ ehr <- ehr |>
 # Mutate admission and discharge date into date
 ehr$admission_date <- dmy(ehr$admission_date)
 ehr$discharge_date <- dmy(ehr$discharge_date)
+
+# Function to standardize time format
+clean_time <- function(x) {
+  x <- trimws(x)  # Remove spaces
+  ifelse(grepl("AM|PM", x), format(parse_date_time(x, "h:M p"), "%H:%M:%S"), 
+         format(parse_date_time(x, "H:M"), "%H:%M:%S"))
+}
+
+# Apply function to both admission_time and discharge_time
+ehr <- ehr %>%
+  mutate(across(c(admission_time, discharge_time), clean_time))
+
+# Convert cleaned time variables to hms format
+ehr <- ehr %>%
+  mutate(across(c(admission_time, discharge_time), as_hms))
 
 # Function to convert all age units to years
 convert_to_years <- function(age_str) {
