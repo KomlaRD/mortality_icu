@@ -133,6 +133,22 @@ and <- and %>%
     discharge_time = as_hms(discharge_time)
   )
 
+# Clean Other referrals
+and <- and %>%
+  mutate(referral_others_specify = case_when(
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("St\\. Francis|Zavier|Assin Fosu", ignore_case = TRUE)) ~ "St. Francis Xavier Hospital",
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("Home|from home", ignore_case = TRUE)) ~ "Home",
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("Dialysis", ignore_case = TRUE)) ~ "Dialysis unit",
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("saltpond municipal hospital", ignore_case = TRUE)) ~ "Saltpond Municipal Hospital",
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("ambulance", ignore_case = TRUE)) ~ "Ambulance",
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("Covid theatre", ignore_case = TRUE)) ~ "COVID theatre",
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("Covid holding bay", ignore_case = TRUE)) ~ "COVID holding bay",
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("ICU admission", ignore_case = TRUE)) ~ NA_character_,
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("trans in but it wasn't indicated", ignore_case = TRUE)) ~ NA_character_,
+    !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("A&e through dialysis", ignore_case = TRUE)) ~ "A&E",
+    TRUE ~ referral_others_specify  # Keep original if no match
+  ))
+
 # Mutate LOS feature
 
 
