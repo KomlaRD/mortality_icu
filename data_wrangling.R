@@ -133,6 +133,19 @@ and <- and %>%
     discharge_time = as_hms(discharge_time)
   )
 
+# Clean gcs data
+and <- and %>%
+  mutate(
+    intubated = case_when(
+      is.na(gcs) ~ NA_character_,  # Preserve missing values
+      gcs == "NOT ASSESSED" ~ NA_character_,  # Recode "NOT ASSESSED" as NA
+      str_detect(gcs, "[tT]") ~ "Yes",  # Check for 't' or 'T'
+      TRUE ~ "No"
+    ),
+    gcs_cleaned = str_extract(gcs, "\\d+"),  # Extract numeric value
+    gcs_cleaned = as.numeric(gcs_cleaned)  # Convert to numeric
+  )
+
 # Clean Other referrals
 and <- and %>%
   mutate(referral_others_specify = case_when(
@@ -148,6 +161,14 @@ and <- and %>%
     !is.na(referral_others_specify) & str_detect(referral_others_specify, regex("A&e through dialysis", ignore_case = TRUE)) ~ "A&E",
     TRUE ~ referral_others_specify  # Keep original if no match
   ))
+
+# Move A&E from others to referral feature
+and %>%
+  mutate(
+    referral = ifelse(referral_others_specify == "A&E", "A&E", referral), 
+    referral_others_specify = ifelse(referral_others_specify == "A&E", NA_character_, referral_others_specify)
+  )
+
 
 # Mutate LOS feature
 
