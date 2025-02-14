@@ -160,6 +160,25 @@ and <- and %>%
     )
   )
 
+# Clean and collapse other ethnic groups
+and <- and %>%
+  mutate(
+    ethnicity_other_specify = as.character(ethnicity_other_specify),  # Ensure character type
+    cleaned_ethnicity = case_when(
+      ethnicity_other_specify %in% c("Wassa", "Wassaw", "Assin", "Twifo", "Nzema", "Denkyira", 
+                                     "Akan", "Ashante", "Akuapem", "Akwapem", "Akyem", 
+                                     "Ahanten", "Ewutu", "Bono", "Ahantan") ~ "Other Akan",
+      ethnicity_other_specify == "Kwaprow" ~ "Fante",
+      ethnicity_other_specify %in% c("Ivorian - foreigner", "Burkinabe", "German", "English .", "Indian") ~ "Non-Ghanaians",
+      ethnicity_other_specify %in% c("Northerna", "Northerner") ~ "Northern tribe",
+      ethnicity_other_specify == "Adaa" ~ "Ga/Dangme",
+      ethnicity_other_specify == "Kusasey" ~ "Kusasi",
+      ethnicity_other_specify == "Sesala" ~ "Sisala",
+      ethnicity_other_specify == "Dagaati" ~ "Dagarti",
+      TRUE ~ ethnicity_other_specify  # Keep original if no match
+    )
+  )
+
 # Clean Other referrals
 and <- and %>%
   mutate(referral_others_specify = case_when(
