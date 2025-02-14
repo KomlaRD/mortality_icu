@@ -16,7 +16,10 @@ pacman::p_load(
 ehr <- import(here("data", "ehr.xlsx"), skip = 3) # Convert "Missing" to NA # Import EHR data (777 observations)
 and <- import(here("data", "and.xlsx")) %>%
   mutate(across(everything(), ~ na_if(trimws(as.character(.)), "Missing"))) %>%
-  mutate(across(everything(), ~ na_if(., "DK/Missing")))  # Convert both to NA # Import A&D data (716 observations)
+  mutate(across(everything(), ~ na_if(., "DK/Missing"))) %>% 
+  mutate(across(everything(), ~ na_if(., "999"))) 
+
+# Convert both to NA # Import A&D data (716 observations)
 
 # Clean colnames
 ehr <- clean_names(ehr) 
@@ -114,6 +117,9 @@ and <- and |>
     discharge_time,
     mortality
   )
+
+# Mutate LOS feature
+
 
 # Create eda reports for ehr
 skim(ehr)
