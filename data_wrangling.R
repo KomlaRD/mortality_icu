@@ -122,6 +122,17 @@ and <- and |>
 and <- and |> rename(
   gcs = severity_score_14
 )
+
+# Standardise admission and discharge time
+# Apply function to both admission_time and discharge_time
+and <- and %>%
+  mutate(
+    admission_time = str_remove(admission_time, "\\.\\d+Z"),
+    discharge_time = str_remove(discharge_time, "\\.\\d+Z"),
+    admission_time = as_hms(admission_time),
+    discharge_time = as_hms(discharge_time)
+  )
+
 # Mutate LOS feature
 
 
