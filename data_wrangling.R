@@ -146,6 +146,20 @@ and <- and %>%
     gcs_cleaned = as.numeric(gcs_cleaned)  # Convert to numeric
   )
 
+# Clean and collapse other occupational status
+and <- and %>%
+  mutate(
+    occupational_status_others_specify = as.character(occupational_status_others_specify),  # Ensure character type
+    cleaned_occupation = case_when(
+      !is.na(occupational_status_others_specify) & str_detect(str_to_lower(occupational_status_others_specify), "retired|pension") ~ "Retired",
+      !is.na(occupational_status_others_specify) & str_detect(str_to_lower(occupational_status_others_specify), "priest|pastor") ~ "Pastor",
+      !is.na(occupational_status_others_specify) & str_detect(str_to_lower(occupational_status_others_specify), "house\\s*wife") ~ "House wife",
+      !is.na(occupational_status_others_specify) & occupational_status_others_specify %in% c("Farmer", "Estate manager", "Trader") ~ "Self-employed",
+      !is.na(occupational_status_others_specify) & occupational_status_others_specify %in% c("House officer", "Apprentice", "Service personnel") ~ "Employed",
+      TRUE ~ occupational_status_others_specify  # Keep original if no match
+    )
+  )
+
 # Clean Other referrals
 and <- and %>%
   mutate(referral_others_specify = case_when(
