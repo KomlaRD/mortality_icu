@@ -118,6 +118,10 @@ and <- and |>
     mortality
   )
 
+# Rename severity_score_14 -> gcs
+and <- and |> rename(
+  gcs = severity_score_14
+)
 # Mutate LOS feature
 
 
