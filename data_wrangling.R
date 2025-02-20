@@ -241,7 +241,9 @@ df_distinct <-
 
 # Adult dataset
 df_adults <- merge(adults, and, by =  "patient_number")
-df_adult_duplicate <- get_dupes(df_adults, patient_number)
+df_adults_distinct <- df_adults %>%
+   distinct(patient_number, admission_date.x, .keep_all = TRUE)
+df_adult_duplicate <- get_dupes(df_adults_distinct, patient_number)
 
 # Create report
 create_report(df)
