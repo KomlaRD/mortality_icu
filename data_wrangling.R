@@ -39,6 +39,12 @@ ehr <- ehr |>
             ))
 # Source of admission feature: NA
 
+# Rename patient_no column
+ehr <- ehr |>
+  rename(
+    "patient_number" = patient_no
+  )
+
 # Mutate admission and discharge date into date
 ehr$admission_date <- dmy(ehr$admission_date)
 ehr$discharge_date <- dmy(ehr$discharge_date)
@@ -224,5 +230,14 @@ create_report(ehr, report_title = "Mortality EDA (EHR)")
 skim(and)
 create_report(and, report_title = "Mortality EDA (A&D)")
 
+# Merge ehr and and datasets
+df <- merge(ehr, and, by = "patient_number")
 
+# Distinct rows
+df_distinct <- 
+  df |>
+   distinct(
+    patient_number, .keep_all = TRUE)
 
+create_report(df)
+create_report(df_distinct)
