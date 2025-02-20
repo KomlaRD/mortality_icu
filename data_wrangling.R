@@ -202,6 +202,16 @@ and %>%
     referral_others_specify = ifelse(referral_others_specify == "A&E", NA_character_, referral_others_specify)
   )
 
+# Remove variables with > 50% missing data
+and <- and |> select(-c(
+  educational_level,
+  cleaned_occupation,
+  occupational_status,
+  occupational_status_others_specify,
+  ethnicity,
+  cleaned_ethnicity,
+  ethnicity_other_specify
+))
 
 # Mutate LOS feature
 
