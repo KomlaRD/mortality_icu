@@ -251,6 +251,17 @@ df_pediatric_distinct <- df_pediatric %>%
   distinct(patient_number, admission_date.x, .keep_all = TRUE)
 df_pediatric_duplicate <- get_dupes(df_pediatric_distinct, patient_number)
 
+## Count observations in full pediatric set and distinct pediatric set
+df_pedi_full_counts <- df_pediatric |>
+  mutate(year = lubridate::year(admission_date.x)) |>  # Extract year
+  count(year)  # Count occurrences per year
+
+df_pedi_distinct_counts <- df_pediatric_distinct |>
+  mutate(year = lubridate::year(admission_date.x)) |>  # Extract year
+  count(year)  # Count occurrences per year
+
+
+
 # Create report
 create_report(df)
 create_report(df_distinct)
