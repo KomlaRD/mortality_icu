@@ -18,12 +18,14 @@ and <- import(here("data", "and.xlsx")) %>%
   mutate(across(everything(), ~ na_if(trimws(as.character(.)), "Missing"))) %>%
   mutate(across(everything(), ~ na_if(., "DK/Missing"))) %>% 
   mutate(across(everything(), ~ na_if(., "999"))) 
+ehr_validated <- import(here("data", "ehr_validated.csv"))
 
 # Convert both to NA # Import A&D data (716 observations)
 
 # Clean colnames
 ehr <- clean_names(ehr) 
 and <- clean_names(and)
+ehr_validated <- clean_names(ehr_validated)
 
 
 # -------------------------------
@@ -265,3 +267,4 @@ df_pedi_distinct_counts <- df_pediatric_distinct |>
 # Create report
 create_report(df)
 create_report(df_distinct)
+
