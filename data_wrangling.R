@@ -29,6 +29,10 @@ ehr <- clean_names(ehr)
 and <- clean_names(and)
 ehr_validated <- clean_names(ehr_validated)
 
+# Remove colnames not in ehr or ehr_validated
+ehr <- ehr |> select(-c("sr_no"))
+ehr_validated <- ehr_validated |>
+  select(-c("x14"))
 
 # -------------------------------
 # EHR cleaning
@@ -84,7 +88,7 @@ compare_dataframes_by_id <- function(df1, df2, id_col) {
 }
 
 # Compare full ehr data and ehr date validated
-compare_dataframes_by_id(ehr, ehr_validated, )
+compare_dataframes_by_id(ehr, ehr_validated, "patient_no")
 
 # Remove irrelevant features ehr
 ehr <- ehr |>
