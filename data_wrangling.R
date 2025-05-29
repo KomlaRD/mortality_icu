@@ -37,58 +37,30 @@ ehr_validated <- ehr_validated |>
 # -------------------------------
 # EHR cleaning
 
-# Compare dataframes
+# Compare dataframes (ehr = df1 and ehr_validated = df2)
 
-compare_dataframes_by_id <- function(df1, df2, id_col) {
-  
-  # Step 1: Extract IDs
-  ids_df1 <- df1[[id_col]]
-  ids_df2 <- df2[[id_col]]
-  
-  # Step 2: Identify ID categories
-  common_ids <- intersect(ids_df1, ids_df2)
-  only_in_df1 <- setdiff(ids_df1, ids_df2)
-  only_in_df2 <- setdiff(ids_df2, ids_df1)
-  
-  # Step 3: Subset data
-  df1_common <- df1 %>% filter(.data[[id_col]] %in% common_ids) %>% arrange(.data[[id_col]])
-  df2_common <- df2 %>% filter(.data[[id_col]] %in% common_ids) %>% arrange(.data[[id_col]])
-  
-  # Step 4: Compare rows
-  identical_rows <- apply(df1_common == df2_common, 1, all)
-  
-  identical_participants <- df1_common[identical_rows, ]
-  differing_participants_df1 <- df1_common[!identical_rows, ]
-  differing_participants_df2 <- df2_common[!identical_rows, ]
-  
-  # Step 5: Create side-by-side difference view
-  comparison_diff <- full_join(differing_participants_df1, differing_participants_df2,
-                               by = id_col, suffix = c(".df1", ".df2"))
-  
-  # Step 6: Summary
-  summary <- list(
-    total_in_df1 = nrow(df1),
-    total_in_df2 = nrow(df2),
-    common_ids = length(common_ids),
-    only_in_df1 = length(only_in_df1),
-    only_in_df2 = length(only_in_df2),
-    identical_participants = nrow(identical_participants),
-    differing_participants = nrow(differing_participants_df1)
-  )
-  
-  return(list(
-    summary = summary,
-    only_in_df1 = df1 %>% filter(.data[[id_col]] %in% only_in_df1),
-    only_in_df2 = df2 %>% filter(.data[[id_col]] %in% only_in_df2),
-    identical_participants = identical_participants,
-    differing_participants_df1 = differing_participants_df1,
-    differing_participants_df2 = differing_participants_df2,
-    comparison_diff = comparison_diff
-  ))
-}
+# Step 1: Find rows in ehr but not in ehr_validated
+only_in_df1 <- anti_join(ehr, ehr_validated, by = "patient_no")
 
-# Compare full ehr data and ehr date validated
-compare_dataframes_by_id(ehr, ehr_validated, "patient_no")
+# Step 2: Find rows in ehr_validated but not in ehr
+only_in_df2 <- anti_join(ehr_validated, ehr, by = "patient_no")
+
+# Step 3: Optional summary
+summary <- list(
+  total_rows_df1 = nrow(ehr),
+  total_rows_df2 = nrow(ehr_validated),
+  only_in_df1 = nrow(only_in_df1),
+  only_in_df2 = nrow(only_in_df2)
+)
+
+# View the summary and mismatches
+summary
+only_in_df1
+only_in_df2
+
+#-----------------------------------
+# Compared validated with and data
+
 
 # Remove irrelevant features ehr
 ehr <- ehr |>
