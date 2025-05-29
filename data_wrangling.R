@@ -64,6 +64,14 @@ compare_dataframes_by_id <- function(df1, df2, id_col) {
   ))
 }
 
+# Compare ehr and ehr_validated dataframes
+ehr_v_ehr_validated <- compare_dataframes_by_id(ehr, ehr_validated, "patient_no")
+
+# Compare ehr_validated and and dataframes
+ehr_validated_v_and <- compare_dataframes_by_id(ehr_validated, and, "patient_no")
+
+# Compare and and ehr dataframes
+and_v_ehr <- compare_dataframes_by_id(and, ehr, "patient_no")
 
 # Remove irrelevant features ehr
 ehr <- ehr |>
