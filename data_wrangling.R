@@ -36,6 +36,11 @@ ehr_validated <- ehr_validated |>
 
 # -------------------------------
 # EHR cleaning
+# Rename patient_no column
+and <- and |>
+  rename(
+    "patient_no" = patient_number
+  )
 
 # Compare dataframes (ehr = df1 and ehr_validated = df2)
 
@@ -82,12 +87,6 @@ ehr <- ehr |>
             visit_no
             ))
 # Source of admission feature: NA
-
-# Rename patient_no column
-ehr <- ehr |>
-  rename(
-    "patient_number" = patient_no
-  )
 
 # Mutate admission and discharge date into date
 ehr$admission_date <- dmy(ehr$admission_date)
