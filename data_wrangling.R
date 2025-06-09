@@ -248,6 +248,8 @@ and <- and |> select(-c(
   ethnicity_other_specify
 ))
 
+# Remove age string from ehr
+ehr <- ehr |> select(-c(age))
 
 # Create eda reports for ehr
 skim(ehr)
