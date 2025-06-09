@@ -6,11 +6,8 @@ pacman::p_load(
   here, # Relative path
   lubridate, # Working with dates
   hms, # Work with time
-  feather, # Interoperable data object
   skimr, # EDA
   DataExplorer, # EDA
-  explore, # EDA
-  readr
 )
 
 # Import datasets
