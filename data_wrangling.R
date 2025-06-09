@@ -250,12 +250,3 @@ and <- and |> select(-c(
 
 # Remove age string from ehr
 ehr <- ehr |> select(-c(age))
-
-# Create eda reports for ehr
-skim(ehr)
-create_report(ehr, report_title = "Mortality EDA (EHR)")
-
-# Create eda reports for and
-skim(and)
-create_report(and, report_title = "Mortality EDA (A&D)")
-
