@@ -126,7 +126,7 @@ pediatrics <- ehr %>% filter(age_numeric < 18)
 # Select relevant features and
 and <- and |>
   select(
-    patient_number,
+    patient_no,
     admission_date,
     admission_time,
     marital_status,
