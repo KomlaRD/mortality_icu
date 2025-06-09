@@ -7,7 +7,7 @@ pacman::p_load(
   lubridate, # Working with dates
   hms, # Work with time
   skimr, # EDA
-  DataExplorer, # EDA
+  DataExplorer # EDA
 )
 
 # Import datasets
@@ -16,7 +16,7 @@ and <- import(here("data", "and.xlsx")) %>%
   mutate(across(everything(), ~ na_if(., "DK/Missing"))) %>% 
   mutate(across(everything(), ~ na_if(., "999"))) 
 
-ehr <- import(here("data", "ehr_validated_update.xlsx"))
+ehr <- import(here("data", "ehr.csv"))
 
 # Convert both to NA # Import A&D data (716 observations)
 
@@ -111,6 +111,9 @@ convert_to_years <- function(age_str) {
 # Apply conversion to dataset
 ehr <- ehr %>%
   mutate(age_numeric = sapply(age, convert_to_years))
+
+# Round age in years
+ehr <- ehr |> mutate(age_numeric = round(age_numeric))
 
 # Split into adults and pediatrics
 adults <- ehr %>% filter(age_numeric >= 18)
