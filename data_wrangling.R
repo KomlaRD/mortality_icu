@@ -14,25 +14,18 @@ pacman::p_load(
 )
 
 # Import datasets
-ehr <- import(here("data", "ehr.xlsx"), skip = 3) # Convert "Missing" to NA # Import EHR data (777 observations)
 and <- import(here("data", "and.xlsx")) %>%
   mutate(across(everything(), ~ na_if(trimws(as.character(.)), "Missing"))) %>%
   mutate(across(everything(), ~ na_if(., "DK/Missing"))) %>% 
   mutate(across(everything(), ~ na_if(., "999"))) 
 
-ehr_validated <- read_csv("data/ehr_validated.csv")
+ehr <- import(here("data", "ehr_validated_update.xlsx"))
 
 # Convert both to NA # Import A&D data (716 observations)
 
 # Clean colnames
 ehr <- clean_names(ehr) 
 and <- clean_names(and)
-ehr_validated <- clean_names(ehr_validated)
-
-# Remove colnames not in ehr or ehr_validated
-ehr <- ehr |> select(-c("sr_no"))
-ehr_validated <- ehr_validated |>
-  select(-c("x14"))
 
 # -------------------------------
 # EHR cleaning
@@ -69,18 +62,11 @@ compare_dataframes_by_id <- function(df1, df2, id_col) {
   ))
 }
 
-# Compare ehr and ehr_validated dataframes
-ehr_v_ehr_validated <- compare_dataframes_by_id(ehr, ehr_validated, "patient_no")
 
-# Compare ehr_validated and and dataframes
-ehr_validated_v_and <- compare_dataframes_by_id(ehr_validated, and, "patient_no")
-
-# Compare and and ehr dataframes
-and_v_ehr <- compare_dataframes_by_id(and, ehr, "patient_no")
 
 # Remove irrelevant features ehr
 ehr <- ehr |>
-  select(-c(sr_no,
+  select(-c(
             source_of_admission,
             bed_no,
             ward_room,
@@ -262,8 +248,6 @@ and <- and |> select(-c(
   ethnicity_other_specify
 ))
 
-# Mutate LOS feature
-
 
 # Create eda reports for ehr
 skim(ehr)
@@ -272,40 +256,4 @@ create_report(ehr, report_title = "Mortality EDA (EHR)")
 # Create eda reports for and
 skim(and)
 create_report(and, report_title = "Mortality EDA (A&D)")
-
-# Merge ehr and and datasets
-df <- merge(ehr, and, by = "patient_number")
-
-# Distinct rows
-df_distinct <- 
-  df |>
-   distinct(
-    patient_number, .keep_all = TRUE)
-
-# Adult dataset
-df_adults <- merge(adults, and, by =  "patient_number")
-df_adults_distinct <- df_adults %>%
-   distinct(patient_number, admission_date.x, .keep_all = TRUE)
-df_adult_duplicate <- get_dupes(df_adults_distinct, patient_number)
-
-# Pediatric dataset
-df_pediatric <- merge(pediatrics, and, by = "patient_number")
-df_pediatric_distinct <- df_pediatric %>%
-  distinct(patient_number, admission_date.x, .keep_all = TRUE)
-df_pediatric_duplicate <- get_dupes(df_pediatric_distinct, patient_number)
-
-## Count observations in full pediatric set and distinct pediatric set
-df_pedi_full_counts <- df_pediatric |>
-  mutate(year = lubridate::year(admission_date.x)) |>  # Extract year
-  count(year)  # Count occurrences per year
-
-df_pedi_distinct_counts <- df_pediatric_distinct |>
-  mutate(year = lubridate::year(admission_date.x)) |>  # Extract year
-  count(year)  # Count occurrences per year
-
-
-
-# Create report
-create_report(df)
-create_report(df_distinct)
 
