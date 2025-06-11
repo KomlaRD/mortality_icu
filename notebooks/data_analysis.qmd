@@ -1,0 +1,34 @@
+---
+title: "Data analysis"
+author: "Eric Anku"
+format: html
+---
+
+```{r load-libraries}
+pacman::p_load(
+  rio, # Import and Export data
+  gtsummary, # Table summaries
+  here # File management
+)
+```
+
+```{r import-data}
+df <- import(here("data", "clean_data", "clean_data.csv"))
+```
+
+```{r table-summary}
+df |>
+  select(-c("admission_date", "discharge_date", "referral_others_specify", "diagnosis")) |>
+  tbl_summary()
+```
+
+```{r}
+df |>
+  select(-c("admission_date", "discharge_date", "referral_others_specify", "diagnosis")) |>
+  tbl_summary(by = "mortality") |>
+  add_p() |>
+  bold_labels() |>
+  bold_p()
+```
+
+
