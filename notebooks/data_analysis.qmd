@@ -3,7 +3,7 @@ title: "Data analysis"
 author: "Eric Anku"
 format: html
 ---
-
+# Import libraries and data
 ```{r load-libraries}
 pacman::p_load(
   rio, # Import and Export data
@@ -20,6 +20,8 @@ pacman::p_load(
 ```{r import-data}
 df <- import(here("data", "clean_data", "clean_data.csv"))
 ```
+
+# Normality test
 
 ```{r normality-test}
 # Function to perform Shapiro-Wilk test and extract p-value
@@ -42,6 +44,7 @@ print("Shapiro values for normality testing")
 print(shapiro_p_values)
 ```
 
+# Table summaries
 ```{r table-summary}
 df |>
   select(-c("admission_date", "discharge_date", "referral_others_specify", "diagnosis",
@@ -74,7 +77,7 @@ df |>
   bold_p()
 ```
 
-## Analysis of variance
+# Analysis of variance
 
 ```{r age-anova}
 age_aov <- aov(df$age_numeric ~ df$mortality)
@@ -93,7 +96,7 @@ gcs_aov <- aov(df$gcs_cleaned ~ df$mortality)
 summary(gcs_aov)
 ```
 
-## Plots
+# Plots
 
 
 ```{r plot-referral-sources}
