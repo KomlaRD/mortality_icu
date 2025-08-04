@@ -12,8 +12,8 @@ pacman::p_load(
   tidyr, # Pivot 
   here, # File management
   ggstatsplot, # Statistical plots
-  ggplot2,
-  stringr
+  ggplot2, # Visualisation
+  stringr # Manipulate string
 )
 ```
 
