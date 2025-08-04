@@ -8,6 +8,8 @@ format: html
 pacman::p_load(
   rio, # Import and Export data
   gtsummary, # Table summaries
+  dplyr, # Data management
+  tidyr, # Pivot 
   here # File management
 )
 ```
@@ -16,10 +18,38 @@ pacman::p_load(
 df <- import(here("data", "clean_data", "clean_data.csv"))
 ```
 
+```{r normality-test}
+# Function to perform Shapiro-Wilk test and extract p-value
+shapiro_test <- function(x) {
+  shapiro_result <- shapiro.test(x)
+  return(shapiro_result$p.value)
+}
+
+# Extract numeric variables from the dataset
+numeric_vars <- df |>
+  select_if(is.numeric)
+
+# Apply the Shapiro-Wilk test to each numeric variable and tidy the results
+shapiro_p_values <- numeric_vars %>%
+  summarise(across(everything(), ~ shapiro_test(.))) %>%
+  pivot_longer(everything(), names_to = "Variable", values_to = "P_Value")
+
+# Display the p-values
+print("Shapiro values for normality testing")
+print(shapiro_p_values)
+```
+
 ```{r table-summary}
 df |>
-  select(-c("admission_date", "discharge_date", "referral_others_specify", "diagnosis")) |>
-  tbl_summary()
+  select(-c("admission_date", "discharge_date", "referral_others_specify", "diagnosis",
+  "comorbidities", "discharge_dayofweek", "discharge_month",
+  "discharge_year",
+  "intubated"
+  )) |>
+  tbl_summary(
+    missing_text = "Unkwown",
+    type = all_dichotomous() ~ "categorical"
+  ) |> add_ci(include = c(mortality))
 ```
 
 ```{r}
@@ -31,4 +61,31 @@ df |>
   bold_p()
 ```
 
+```{r}
+df |>
+  select(c("mortality",
+  "discharge_year")) |>
+  tbl_summary(by = "discharge_year") |>
+  add_p() |>
+  bold_labels() |>
+  bold_p()
+```
 
+## Analysis of variance
+
+```{r age-anova}
+age_aov <- aov(df$age_numeric ~ df$mortality)
+summary(age_aov)
+```
+
+
+```{r los-anova}
+los_aov <- aov(df$length_of_stay_days ~ df$mortality)
+summary(los_aov)
+```
+
+
+```{r gcs-anova}
+gcs_aov <- aov(df$gcs_cleaned ~ df$mortality)
+summary(gcs_aov)
+```
